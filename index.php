@@ -58,6 +58,9 @@
 						case "growth":
 							return "See how many users joined FAF in the past few days";
 							break;
+						case "growth-fancy":
+							return "See how many users joined FAF in the past few days including the client they use now";
+							break;
 					}
 				}
 
