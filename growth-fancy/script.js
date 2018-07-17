@@ -17,6 +17,13 @@ function setLoadingZoneDesc(str) {
 }
 
 function appendToLoadingZoneDesc(str) {
+	//I don't like creating a new elements/fiddling with the dom for new messages,
+	//so I just update the string content of the message element.
+	/*
+	let newChild = document.createElement('span')
+	newChild.innerHTML = str;
+	loadingZoneDescElem.appendChild(newChild);
+	*/
 	loadingZoneDescElem.innerHTML = loadingZoneDescElem.innerHTML + str;
 }
 
@@ -35,7 +42,7 @@ function initDocElemVars() {
 	loadingIndicatorElem = document.getElementById('loadingIndicator');
 	loadingZoneDescElem = document.getElementById('loadingZoneDescription');
 	errorDescElem = document.getElementById('errorDescription');
-	flotContainerElem = document.getElementById('demo-container-flot');
+	flotContainerElem = document.getElementById('flot-container');
 }
 
 function getStatsFromDocument(){
@@ -186,7 +193,7 @@ function plotWithOptions(series) {
 	console.log(width + "; " + height);
 	flotContainerElem.setAttribute("style","width:" + width + "px; height:" + height + "px");
 	
-	$.plot("#placeholderFlot",
+	$.plot("#flot-placeholder",
 		series,
 		{
 		xaxis: {
@@ -213,16 +220,12 @@ function plotWithOptions(series) {
 		}
 	});
 	
-	$("<div id='tooltip'></div>").css({
+	$("<div id='flot-tooltip'></div>").css({
 		position: "absolute",
 		display: "none",
-		border: "1px solid #fdd",
-		padding: "2px",
-		"background-color": "#fee",
-		opacity: 0.80
 	}).appendTo("body");
-
-	$("#placeholderFlot").bind("plothover", function (event, pos, item) {
+	
+	$("#flot-placeholder").bind("plothover", function (event, pos, item) {
 		var str = "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")";
 		$("#hoverdata").text(str);
 
@@ -232,10 +235,10 @@ function plotWithOptions(series) {
 			
 			var ySerie = item.series.data[item.dataIndex][1];
 
-			$("#tooltip").html(/*item.series.label + " of " + x + " = " + */y + "; " + ySerie)
+			$("#flot-tooltip").html(/*item.series.label + " of " + x + " = " + */y + "; " + ySerie)
 				.css({top: item.pageY+5, left: item.pageX+5}).fadeIn(200);
 		} else {
-			$("#tooltip").hide();
+			$("#flot-tooltip").hide();
 		}
 	});
 	showDone();

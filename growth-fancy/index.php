@@ -28,8 +28,8 @@
 			</p>
 		</div>
 		
-		<div id="demo-container-flot" class="demo-container" style="display:none;">
-			<div id="placeholderFlot" class="demo-placeholder"></div>
+		<div id="flot-container" class="flot-container-style" style="display:none;">
+			<div id="flot-placeholder" class="flot-placeholder-style"></div>
 		</div>
 	</body>
 </html>
