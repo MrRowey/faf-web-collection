@@ -188,8 +188,8 @@ function plotWithOptions(series) {
 	appendToLoadingZoneDesc(" Creating chart.");
 	console.log(series);
 	
-	let width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-	let height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+	let width = 0.98 * Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+	let height = 0.98 * Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 	console.log(width + "; " + height);
 	flotContainerElem.setAttribute("style","width:" + width + "px; height:" + height + "px");
 	
@@ -235,7 +235,8 @@ function plotWithOptions(series) {
 			
 			var ySerie = item.series.data[item.dataIndex][1];
 
-			$("#flot-tooltip").html(/*item.series.label + " of " + x + " = " + */y + "; " + ySerie)
+			//$("#flot-tooltip").html(item.series.label + " of " + x + " = " + y + "; " + ySerie)
+			$("#flot-tooltip").html(item.series.label + ": " + ySerie)
 				.css({top: item.pageY+5, left: item.pageX+5}).fadeIn(200);
 		} else {
 			$("#flot-tooltip").hide();

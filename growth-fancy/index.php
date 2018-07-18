@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-			<LINK href="style.css?version=9345" rel="stylesheet" type="text/css">
+			<LINK href="style.css?version=<?php echo time();?>" rel="stylesheet" type="text/css">
 			<!--<link rel="icon" href="favicon.gif"  type="image/gif"/>-->
 			<link rel="icon" href="favicon.png" />
 			<title>FAF growth</title>
