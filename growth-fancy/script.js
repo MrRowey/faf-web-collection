@@ -1,5 +1,6 @@
 let recordLimit = 10000;
 
+let descriptionElem;
 let loadingIndicatorElem;
 let loadingZoneDescElem;
 let errorDescElem;
@@ -39,6 +40,7 @@ function showDone() {
 }
 
 function initDocElemVars() {
+	descriptionElem = document.getElementById('description');
 	loadingIndicatorElem = document.getElementById('loadingIndicator');
 	loadingZoneDescElem = document.getElementById('loadingZoneDescription');
 	errorDescElem = document.getElementById('errorDescription');
@@ -188,8 +190,11 @@ function plotWithOptions(series) {
 	appendToLoadingZoneDesc(" Creating chart.");
 	console.log(series);
 	
-	let width = 0.98 * Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-	let height = 0.98 * Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+	let viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+	let viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+	
+	let width = 0.98 * viewportWidth;
+	let height = viewportHeight - descriptionElem.offsetHeight;
 	console.log(width + "; " + height);
 	flotContainerElem.setAttribute("style","width:" + width + "px; height:" + height + "px");
 	
@@ -215,14 +220,19 @@ function plotWithOptions(series) {
 				barWidth: millisPerDay - millisPerHour
 			},
 		},
+		colors: ["#993300", "#4854B0", "#BEA910"],
 		grid: {
 			hoverable: true
+		},
+		legend: {
+			backgroundColor: "#2E2100",
+			backgroundOpacity: 0.5
 		}
 	});
 	
 	$("<div id='flot-tooltip'></div>").css({
 		position: "absolute",
-		display: "none",
+		display: "none"
 	}).appendTo("body");
 	
 	$("#flot-placeholder").bind("plothover", function (event, pos, item) {
