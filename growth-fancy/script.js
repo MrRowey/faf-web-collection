@@ -127,10 +127,11 @@ function createSeriesArray(seriesObject) {
 			
 			serieArray.push([dateIndex, count]);
 		}
-		let serieLabel = serieIndex === "null" ? "other" : serieIndex;
+		let serieLabel = serieIndex === "null" ? "not logged in yet" : serieIndex;
 		let serieObject = {label: serieLabel, data: serieArray};
 		seriesArray.push(serieObject);
 	}
+	seriesArray.sort(function(so1, so2) {return so1.label.localeCompare(so2.label);});
 	return seriesArray;
 }
 
@@ -226,7 +227,8 @@ function plotWithOptions(series) {
 		},
 		legend: {
 			backgroundColor: "#2E2100",
-			backgroundOpacity: 0.5
+			backgroundOpacity: 0.5,
+			sorted: "descending"
 		}
 	});
 	
