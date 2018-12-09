@@ -53,6 +53,7 @@ function getStatsFromDocument(){
 		showLoading();
 		let numberOfDays = parseFloat(document.getElementById('records').value) || 0;
 		setLoadingZoneDesc("Requesting " + numberOfDays + " days from server.");
+		//createChartWithTestData();
 		createChart(numberOfDays);
 	} catch(err){
 		handleError(err);
@@ -67,6 +68,20 @@ function getDateStringFrom(numberOfDays) {
 	let dateStringFrom = dateFrom.toISOString();
 	console.log(dateStringFrom);
 	return dateStringFrom;
+}
+
+function createChartWithTestData(){
+	let request = new XMLHttpRequest();
+	request.addEventListener('load', function(event) {
+		if (request.status >= 200 && request.status < 300) {
+			displayResults(this.responseText)
+		} else {
+			handleError(request.status + " - " + request.statusText + " - " + request.responseText);
+		}
+	});
+	request.overrideMimeType("application/json");
+	request.open("GET", "testDataBig.json", true);
+	request.send();
 }
 
 function createChart(numberOfDays){
@@ -125,13 +140,14 @@ function createSeriesArray(seriesObject) {
 		for (let dateIndex in serie){
 			let count = serie[dateIndex];
 			
-			serieArray.push([dateIndex, count]);
+			//+dateIndex converts the milliseconds string into a number (removes the double quotes), otherwise HighCharts labels the x axis incorrectly
+			serieArray.push([+dateIndex, count]);
 		}
 		let serieLabel = serieIndex === "null" ? "not logged in yet" : serieIndex;
-		let serieObject = {label: serieLabel, data: serieArray};
+		let serieObject = {label: serieLabel, name: serieLabel, data: serieArray};
 		seriesArray.push(serieObject);
 	}
-	seriesArray.sort(function(so1, so2) {return so1.label.localeCompare(so2.label);});
+	seriesArray.sort(function(so1, so2) {return so1.label.localeCompare(so2.label);}); //descending
 	return seriesArray;
 }
 
@@ -154,106 +170,11 @@ function displayResults(str_result){
 
 		let seriesObject = createSeriesObject(jsonData);
 		let seriesArray = createSeriesArray(seriesObject);
-		plotWithOptions(seriesArray);
-		
-		let testArray = [
-			//seriesArray
-			[
-				/*serie1*/
-				[/*serie1DataPoint1*/	1, 1],
-				[/*serie1DataPoint2*/	2, 2],
-				[/*serie1DataPoint2*/	3, 3]
-				],
-				[
-					/*serie2*/
-					[/*serie2DataPoint1*/	1, 3],
-					[/*serie2DataPoint2*/	2, 2],
-					[/*serie2DataPoint2*/	3, 1]
-					]
-			]
-		//plotWithOptions(testArray);
+		plotCharts(seriesArray);
+		showDone();
 	} catch(err){
 		handleError(err);
 	}
 }
 
-let stack = true;
-let bars = true;//false,
-let lines = false;//true,
-let steps = false;//true;
-
-//hours * minutes * seconds * milliseconds
-let millisPerDay = 24 * 60 * 60 * 1000;
-//minutes * seconds * milliseconds
-let millisPerHour = 60 * 60 * 1000;
-
-function plotWithOptions(series) {
-	appendToLoadingZoneDesc(" Creating chart.");
-	console.log(series);
-	
-	let viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-	let viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-	
-	let width = 0.98 * viewportWidth;
-	let height = viewportHeight - descriptionElem.offsetHeight;
-	console.log(width + "; " + height);
-	flotContainerElem.setAttribute("style","width:" + width + "px; height:" + height + "px");
-	
-	$.plot("#flot-placeholder",
-		series,
-		{
-		xaxis: {
-			mode: "time",
-			minTickSize: [1, "day"]
-		},
-		yaxis: {
-			tickSize: 10
-		},
-		series: {
-			stack: 0,//stack,
-			lines: {
-				show: lines,
-				fill: true,
-				steps: steps
-			},
-			bars: {
-				show: bars,
-				barWidth: millisPerDay - millisPerHour
-			},
-		},
-		colors: ["#993300", "#4854B0", "#BEA910"],
-		grid: {
-			hoverable: true
-		},
-		legend: {
-			backgroundColor: "#2E2100",
-			backgroundOpacity: 0.5,
-			sorted: "descending"
-		}
-	});
-	
-	$("<div id='flot-tooltip'></div>").css({
-		position: "absolute",
-		display: "none"
-	}).appendTo("body");
-	
-	$("#flot-placeholder").bind("plothover", function (event, pos, item) {
-		var str = "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")";
-		$("#hoverdata").text(str);
-
-		if (item) {
-			var x = item.datapoint[0];
-			var y = item.datapoint[1];
-			
-			var ySerie = item.series.data[item.dataIndex][1];
-
-			//$("#flot-tooltip").html(item.series.label + " of " + x + " = " + y + "; " + ySerie)
-			$("#flot-tooltip").html(item.series.label + ": " + ySerie)
-				.css({top: item.pageY+5, left: item.pageX+5}).fadeIn(200);
-		} else {
-			$("#flot-tooltip").hide();
-		}
-	});
-	showDone();
-}
 

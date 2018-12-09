@@ -8,11 +8,12 @@
 			<title>FAF growth</title>
 		</meta>
 
-		<script language="javascript" type="text/javascript" src="highcharts.js"></script>
-		<script language="javascript" type="text/javascript" src="exporting.js"></script>
-		<script language="javascript" type="text/javascript" src="export-data.js"></script>
+		<script language="javascript" type="text/javascript" src="jquery.js"></script>
+		<script language="javascript" type="text/javascript" src="jquery.flot.js"></script>
+		<script language="javascript" type="text/javascript" src="jquery.flot.stack.js"></script>
+		<script language="javascript" type="text/javascript" src="jquery.flot.time.js"></script>
 		
-		<script language="javascript" type="text/javascript" src="chartsHighcharts.js"></script>
+		<script language="javascript" type="text/javascript" src="chartsFlot.js"></script>
 		<script language="javascript" type="text/javascript" src="script.js"></script> 
 	</head>
 	
@@ -31,9 +32,5 @@
 		<div id="flot-container" class="flot-container-style" style="display:none;">
 			<div id="flot-placeholder" class="flot-placeholder-style"></div>
 		</div>
-		
-		<div id="hc-container-absolute" style="min-width: 310px; height: 50vh; margin: 0 auto"></div>
-		
-		<div id="hc-container-percent" style="min-width: 310px; height: 50vh; margin: 0 auto"></div>
 	</body>
 </html>
