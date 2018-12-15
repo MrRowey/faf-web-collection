@@ -85,13 +85,6 @@ function createChartWithTestData(){
 }
 
 function createChart(numberOfDays){
-	//Test-Data
-	/*
-	let xobj = new XMLHttpRequest();
-	xobj.overrideMimeType("application/json");
-	xobj.open("GET", "testData.json", true);
-	*/
-	
 	let request = new XMLHttpRequest();
 	request.addEventListener('load', function(event) {
 		if (request.status >= 200 && request.status < 300) {
