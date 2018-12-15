@@ -54,7 +54,7 @@ function getStatsFromDocument(){
 		let numberOfDays = parseFloat(document.getElementById('records').value) || 0;
 		setLoadingZoneDesc("Requesting " + numberOfDays + " days from server.");
 		//createChartWithTestData();
-		createChart(numberOfDays);
+		createChart(numberOfDays, 0, []);
 	} catch(err){
 		handleError(err);
 	}
@@ -84,38 +84,64 @@ function createChartWithTestData(){
 	request.send();
 }
 
-function createChart(numberOfDays){
+//Recursive function which takes number of days and current page no. as input and received data as output argument.
+function createChart(numberOfDays, page, jsonDataArray){
+	let requestUrl;
 	let request = new XMLHttpRequest();
 	request.addEventListener('load', function(event) {
 		if (request.status >= 200 && request.status < 300) {
-			displayResults(this.responseText)
+			try {
+				let jsonData = JSON.parse(this.responseText);
+				jsonDataArray.push(jsonData);
+				let metaData = jsonData.meta.page;
+				console.log("Received result for page " + metaData.number + " of " + metaData.totalPages + ".");
+				if (metaData.number === metaData.totalPages) {
+					displayResults(jsonDataArray)
+				} else {
+					let nextPage = metaData.number + 1;
+					createChart(numberOfDays, nextPage, jsonDataArray);
+				}
+			} catch(err){
+				handleError(err);
+			}
 		} else {
 			handleError(request.status + " - " + request.statusText + " - " + request.responseText);
 		}
 	});
-	request.open("GET", "https://api.faforever.com/data/player?fields[player]=userAgent,createTime&filter[player]=createTime>" + getDateStringFrom(numberOfDays) /*2018-07-05T00:00Z*/ + "&page[limit]=" + recordLimit + "&page[totals]", true);
+	
+	let pageNoArgument;
+	if (page < 1) {
+		//Otherwise "InvalidValueException: Invalid value: page[number] must contain a positive value."
+		pageNoArgument = "";
+	} else {
+		pageNoArgument = "&page[number]=" + page;
+	}
+	console.log("Requesting page " + page + ".");
+	request.open("GET", "https://api.faforever.com/data/player?fields[player]=userAgent,createTime&filter[player]=createTime>" + getDateStringFrom(numberOfDays) /*2018-07-05T00:00Z*/ + "&page[size]=" + recordLimit + pageNoArgument + "&page[totals]", true);
 	request.setRequestHeader("Content-type","application/vnd.api+json");
 	request.send();
 }
 
-function createSeriesObject(jsonData) {
+function createSeriesObject(jsonDataArray) {
 	let dates = {};
 	let series = {};
 	
-	for (let userIndex in jsonData.data){
-		let user = jsonData.data[userIndex];
-		let userAgent = user.attributes.userAgent;
-		let dateTime = user.attributes.createTime;
-		let date = new Date(dateTime.substring(0, 10)).getTime();
-		//create object for date to hold user agent entries if non-existant
-		dates[date] = dates[date] || {};
-		//increment user agent entry or create with 1 as value
-		dates[date][userAgent] = dates[date][userAgent] + 1 || 1;
-		
-		series[userAgent] = series[userAgent] || {};
-		series[userAgent][date] = series[userAgent][date] + 1 || 1;
+	for (let jsonDataIndex in jsonDataArray) {
+		let jsonData = jsonDataArray[jsonDataIndex];
+		for (let userIndex in jsonData.data){
+			let user = jsonData.data[userIndex];
+			let userAgent = user.attributes.userAgent;
+			let dateTime = user.attributes.createTime;
+			let date = new Date(dateTime.substring(0, 10)).getTime();
+			//create object for date to hold user agent entries if non-existant
+			dates[date] = dates[date] || {};
+			//increment user agent entry or create with 1 as value
+			dates[date][userAgent] = dates[date][userAgent] + 1 || 1;
+			
+			series[userAgent] = series[userAgent] || {};
+			series[userAgent][date] = series[userAgent][date] + 1 || 1;
+		}
 	}
-	//}
 	console.log(dates);
 	console.log(series);
 	
@@ -144,24 +170,18 @@ function createSeriesArray(seriesObject) {
 	return seriesArray;
 }
 
-function displayResults(str_result){
+function displayResults(jsonDataArray){
 	try {
-		appendToLoadingZoneDesc(" Parsing " + str_result.length + " characters to json.");
+		appendToLoadingZoneDesc(" Received " + jsonDataArray.length + " data page(s).");
+		console.log("Data to display: ");
+		console.log(jsonDataArray);
 		
 		//https://elide.io/pages/guide/10-jsonapi.html
 		//curl -g -X GET --header 'Accept: application/vnd.api+json' 'https://api.faforever.com/data/player?fields[player]=login,userAgent,createTime,id&filter[player]=createTime>2018-06-01T00:00Z&page[limit]=10000&page[totals]' > testData.json
 		//curl -g -X GET --header 'Accept: application/vnd.api+json' 'https://api.faforever.com/data/player?fields[player]=userAgent,createTime&filter[player]=createTime>2018-05-01T00:00Z&page[limit]=10000&page[totals]' > testData2.json
 		//let jsonData = {"data":[{"type":"player","id":"258776","attributes":{"createTime":"2018-07-05T12:09:40Z","login":"iEnderL0rdz","userAgent":"null"}},{"type":"player","id":"258777","attributes":{"createTime":"2018-07-05T12:47:47Z","login":"pdimon54","userAgent":"faf-client"}},{"type":"player","id":"258778","attributes":{"createTime":"2018-07-04T12:49:10Z","login":"Linsterot","userAgent":"faf-client"}},{"type":"player","id":"258779","attributes":{"createTime":"2018-07-05T13:09:52Z","login":"south_korea","userAgent":"faf-client"}},{"type":"player","id":"258780","attributes":{"createTime":"2018-07-05T13:27:49Z","login":"TexasVet","userAgent":"faf-client"}},{"type":"player","id":"258781","attributes":{"createTime":"2018-07-05T13:33:40Z","login":"Pyrhus","userAgent":"faf-client"}},{"type":"player","id":"258782","attributes":{"createTime":"2018-07-05T13:52:06Z","login":"Erlandior","userAgent":"downlords-faf-client"}},{"type":"player","id":"258783","attributes":{"createTime":"2018-07-05T13:55:24Z","login":"Astils","userAgent":"faf-client"}},{"type":"player","id":"258784","attributes":{"createTime":"2018-07-05T14:06:54Z","login":"Kirito9724","userAgent":"faf-client"}},{"type":"player","id":"258785","attributes":{"createTime":"2018-07-05T14:13:51Z","login":"Grineau","userAgent":"faf-client"}}]};
-		let jsonData = JSON.parse(str_result);
-		//console.log(jsonData.length());
-		let numberOfRecords = jsonData.data.length;
-		appendToLoadingZoneDesc(" Parsing " + numberOfRecords + " records");
-		if (numberOfRecords >= recordLimit) {
-			appendToLoadingZoneDesc(" (limit reached)");
-		}
-		appendToLoadingZoneDesc(".");
 
-		let seriesObject = createSeriesObject(jsonData);
+		let seriesObject = createSeriesObject(jsonDataArray);
 		let seriesArray = createSeriesArray(seriesObject);
 		
 		//This is how a seriesArray needs to look like to be able to show it in a chart.
