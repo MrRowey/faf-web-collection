@@ -170,6 +170,23 @@ function displayResults(str_result){
 
 		let seriesObject = createSeriesObject(jsonData);
 		let seriesArray = createSeriesArray(seriesObject);
+		
+		//This is how a seriesArray needs to look like to be able to show it in a chart.
+		let testArray = [
+			//seriesArray
+			[
+				/*serie1*/
+				[/*serie1DataPoint1*/	1, 1],
+				[/*serie1DataPoint2*/	2, 2],
+				[/*serie1DataPoint2*/	3, 3]
+			], [
+				/*serie2*/
+				[/*serie2DataPoint1*/	1, 3],
+				[/*serie2DataPoint2*/	2, 2],
+				[/*serie2DataPoint2*/	3, 1]
+			]
+		]
+		
 		plotCharts(seriesArray);
 		showDone();
 	} catch(err){

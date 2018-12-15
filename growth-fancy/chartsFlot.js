@@ -1,22 +1,5 @@
 function plotCharts(seriesArray) {
 	plotWithOptions(seriesArray);
-	
-	let testArray = [
-		//seriesArray
-		[
-			/*serie1*/
-			[/*serie1DataPoint1*/	1, 1],
-			[/*serie1DataPoint2*/	2, 2],
-			[/*serie1DataPoint2*/	3, 3]
-			],
-			[
-				/*serie2*/
-				[/*serie2DataPoint1*/	1, 3],
-				[/*serie2DataPoint2*/	2, 2],
-				[/*serie2DataPoint2*/	3, 1]
-				]
-		]
-	//plotWithOptions(testArray);
 }
 
 function plotWithOptions(series) {
