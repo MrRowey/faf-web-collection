@@ -151,7 +151,7 @@
 			<p id="loadingZoneDescription">
 				Loading records...
 			</p>
-			<img src="victi-loading.gif" alt="loading..."><br>
+			<img src="/loading.gif" alt="loading..."><br>
 			<?php 
 				if ($records <= 10000){
 					echo "This should take less than a minute!";

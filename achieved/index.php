@@ -118,7 +118,7 @@
 			<p id="loadingZoneDescription">
 				Loading achievements...
 			</p>
-			<img src="eevee-loading.gif" alt="loading..."><br>
+			<img src="/loading.gif" alt="loading..."><br>
 			This can take up to one minute!
 		</div>
 		

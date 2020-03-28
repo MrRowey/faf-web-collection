@@ -70,7 +70,7 @@
 	
 	<div id="loadingZone" style="text-align:center;visibility:hidden;">
 		Loading...<br>
-		<img src="loading.gif" alt="loading...">
+		<img src="/loading.gif" alt="loading...">
 	</div>
 	
 	<div id="receiverZone" style="text-align:center;">

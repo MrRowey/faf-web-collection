@@ -312,7 +312,7 @@
 			<p id="loadingZoneDescription">
 				Loading records...
 			</p>
-			<img src="flygon-loading.gif" alt="loading..."><br>
+			<img src="/loading.gif" alt="loading..."><br>
 			This should take a second!
 		</div>
 		
