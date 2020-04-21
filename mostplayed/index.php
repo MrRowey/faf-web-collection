@@ -151,7 +151,7 @@
 			<p id="loadingZoneDescription">
 				Loading records...
 			</p>
-			<img src="pachi-loading.gif" alt="loading..."><br>
+			<img src="/loading.gif" alt="loading..."><br>
 			<p>
 				<?php 
 					echo "This may take around ".ceil((ceil($records/100))/60)." minutes";

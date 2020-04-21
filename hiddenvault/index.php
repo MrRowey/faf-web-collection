@@ -225,7 +225,7 @@
 		</div>
 		<div id="loadingZone" class="search" style="text-align:center;">
 			<p id="loadingZoneDescription"></p>
-			<img src="espeon-loading.gif" alt="loading...">
+			<img src="/loading.gif" alt="loading...">
 		</div>
 		
 		<div id="resourcesList">
