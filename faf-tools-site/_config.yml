@@ -1,0 +1,5 @@
+title: FAF Tools
+description: A collection of tools that visualize statistics.
+baseurl: ""
+url: "http://localhost:4000"
+theme: jekyll-theme-minimal

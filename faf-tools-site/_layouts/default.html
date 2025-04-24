@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title | default: site.title }}</title>
+    
+    <!-- Tailwind CSS -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/images/favicon.ico" />
+
+    <!-- Custom CSS (Optional) -->
+    <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <!-- Navbar -->
+    <nav class="bg-blue-500 text-white shadow-md p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h2 class="text-xl font-bold">FAF Tools</h2>
+            <span class="text-sm italic">A collection of tools that visualize statistics.</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto my-4 px-4">
+        {{ content }}
+    </div>
+
+    <!-- Footer -->
+    <nav class="bg-gray-800 text-white fixed bottom-0 w-full p-3">
+        <ul class="flex justify-center space-x-4">
+            <li>
+                <a class="hover:text-gray-400" href="https://github.com/FAForever/faf-web-collection">Github</a>
+            </li>
+            <li>
+                <a class="hover:text-gray-400" href="/LICENSE">License</a>
+            </li>
+            <li>
+                <a class="hover:text-gray-400" href="https://faforever.com">FAF</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Tailwind JS (Optional) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/assets/js/app.js"></script>
+</body>
+</html>
